@@ -36,18 +36,23 @@ void AEnemyAIController::BeginPlay()
 			const TArray<ABall*>& BallsList = AIGameMode->GetBalls();
 
 			ABall* NearestBall = nullptr;
+			const int32 RandomFactor = FMath::RandRange(0, 15) - 5;
+			int64 BestBallValue = 999999999999999999;
 
 			for (int32 i = 0; i < BallsList.Num(); i++)
 			{
+				int64 BallValue = FVector::Distance(AIController->GetPawn()->GetActorLocation(), BallsList[i]->GetActorLocation()) - BallsList[i]->SpeedIncreace * RandomFactor;
 				if (!BallsList[i]->GetAttachParentActor() &&
 					(!NearestBall ||
-						FVector::Distance(AIController->GetPawn()->GetActorLocation(), BallsList[i]->GetActorLocation()) <
-						FVector::Distance(AIController->GetPawn()->GetActorLocation(), NearestBall->GetActorLocation())))
+						BallValue<
+						BestBallValue))
 				{
+					BestBallValue = BallValue;
 					NearestBall = BallsList[i];
 				}
 			}
 
+			UE_LOG(LogTemp, Warning, TEXT("Ball: %d"), BestBallValue);
 			BestBall = NearestBall;
 			UE_LOG(LogTemp, Warning, TEXT("BestBall"));
 		},

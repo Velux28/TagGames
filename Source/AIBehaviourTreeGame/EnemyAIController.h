@@ -89,7 +89,7 @@ protected:
 
 	ABall* BestBall;
 
-	float BallWaitTime = 5;
+	float BallWaitTime = 2;
 	float BallCurrTimer;
 	float PatrolWaitTime = 5;
 	float PatrolCurrTimer;
