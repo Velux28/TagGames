@@ -80,6 +80,7 @@ protected:
 	TSharedPtr<FAivState> CurrentState;
 	TSharedPtr<FAivState> GoToPlayer;
 	TSharedPtr<FAivState> GoToBall;
+	TSharedPtr<FAivState> WaitForBall;
 	TSharedPtr<FAivState> GrabBall;
 	TSharedPtr<FAivState> SearchForBall;
 
@@ -87,4 +88,10 @@ protected:
 	void Tick(float DeltaTime) override;
 
 	ABall* BestBall;
+
+	float BallWaitTime = 5;
+	float BallCurrTimer;
+	float PatrolWaitTime = 5;
+	float PatrolCurrTimer;
+
 };

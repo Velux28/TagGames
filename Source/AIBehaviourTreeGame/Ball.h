@@ -15,6 +15,8 @@ public:
 	// Sets default values for this actor's properties
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* BallMesh;
+	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	//CollisionComponent* BallMesh;
 
 	ABall();
 
@@ -25,6 +27,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 SpeedIncreace;
 
 
 

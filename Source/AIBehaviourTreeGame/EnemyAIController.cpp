@@ -49,6 +49,7 @@ void AEnemyAIController::BeginPlay()
 			}
 
 			BestBall = NearestBall;
+			UE_LOG(LogTemp, Warning, TEXT("BestBall"));
 		},
 		nullptr,
 		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {
@@ -57,8 +58,25 @@ void AEnemyAIController::BeginPlay()
 				return GoToBall;
 			}
 			else {
+				UE_LOG(LogTemp, Error, TEXT("Ricerco la palla"));
+				return WaitForBall;
+			}
+		}
+	);
+
+	WaitForBall = MakeShared<FAivState>(
+		[this](AAIController* AIController) {
+			BallCurrTimer = 0;
+		},
+		nullptr,
+		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {
+			BallCurrTimer += DeltaTime;
+
+			if (BallCurrTimer >= BallWaitTime)
+			{
 				return SearchForBall;
 			}
+			return nullptr;
 		}
 	);
 
