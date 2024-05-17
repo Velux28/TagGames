@@ -83,15 +83,21 @@ protected:
 	TSharedPtr<FAivState> WaitForBall;
 	TSharedPtr<FAivState> GrabBall;
 	TSharedPtr<FAivState> SearchForBall;
+	TSharedPtr<FAivState> ChangePatrol;
+	TSharedPtr<FAivState> MoveToPatrol;
+	TSharedPtr<FAivState> WaitForPatrol;
 
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
 
 	ABall* BestBall;
+	AActor* CurrPatrol;
 
 	float BallWaitTime = 2;
 	float BallCurrTimer;
 	float PatrolWaitTime = 5;
 	float PatrolCurrTimer;
+
+	bool bSlowEnemy;
 
 };

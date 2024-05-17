@@ -1,4 +1,6 @@
 #include "EnemyAIController.h"
+#include "AIBehaviourTreeGameCharacter.h"
+#include "Misc/OutputDeviceNull.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "AIBehaviourTreeGameGameMode.h"
 
@@ -41,7 +43,15 @@ void AEnemyAIController::BeginPlay()
 
 			for (int32 i = 0; i < BallsList.Num(); i++)
 			{
-				int64 BallValue = FVector::Distance(AIController->GetPawn()->GetActorLocation(), BallsList[i]->GetActorLocation()) - BallsList[i]->SpeedIncreace * RandomFactor;
+				int64 BallValue = 999999999999999999;
+				if (bSlowEnemy)
+				{
+					BallValue = FVector::Distance(AIController->GetPawn()->GetActorLocation(), BallsList[i]->GetActorLocation()) + BallsList[i]->SpeedIncreace * RandomFactor;
+				}
+				else 
+				{
+					BallValue = FVector::Distance(AIController->GetPawn()->GetActorLocation(), BallsList[i]->GetActorLocation()) + BallsList[i]->SpeedIncreace * RandomFactor;
+				}
 				if (!BallsList[i]->GetAttachParentActor() &&
 					(!NearestBall ||
 						BallValue<
@@ -62,7 +72,8 @@ void AEnemyAIController::BeginPlay()
 			{
 				return GoToBall;
 			}
-			else {
+			else 
+			{
 				UE_LOG(LogTemp, Error, TEXT("Ricerco la palla"));
 				return WaitForBall;
 			}
@@ -108,6 +119,28 @@ void AEnemyAIController::BeginPlay()
 			{
 				BestBall = nullptr;
 			}
+		},
+		nullptr,
+		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {
+
+			if (!BestBall)
+			{
+				//Cry About That
+				return SearchForBall;
+			}
+
+			BestBall->AttachToActor(AIController->GetPawn(), FAttachmentTransformRules::KeepRelativeTransform);
+			BestBall->SetActorRelativeLocation(FVector(0, 0, 0));
+
+			return GoToPlayer;
+		}
+	);
+
+	ChangePatrol = MakeShared<FAivState>(
+		[this](AAIController* AIController)
+		{
+			const int32 RandomFactor = FMath::RandRange(0, 15);
+			CurrPatrol = Cast<AAIBehaviourTreeGameCharacter>(AIController->GetPawn())->ChangePatrolPoint(RandomFactor);
 		},
 		nullptr,
 		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {

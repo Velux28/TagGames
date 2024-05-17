@@ -69,5 +69,11 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+	TArray<AActor*> EnemyPatrolPoints;
+
+	UFUNCTION(BlueprintCallable)
+	AActor* ChangePatrolPoint(int32 NewPoint);
 };
 

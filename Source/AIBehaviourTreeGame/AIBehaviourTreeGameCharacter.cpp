@@ -128,3 +128,8 @@ void AAIBehaviourTreeGameCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+
+AActor* AAIBehaviourTreeGameCharacter::ChangePatrolPoint(int32 NewPoint)
+{
+	return EnemyPatrolPoints[NewPoint];
+}
