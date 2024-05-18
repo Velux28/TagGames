@@ -76,6 +76,8 @@ public:
 	float SightAngle;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SightRadius;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bSlowEnemy;
 
 	UFUNCTION(BlueprintCallable)
 	AActor* ChangePatrolPoint(int32 NewPoint);

@@ -86,6 +86,7 @@ protected:
 	TSharedPtr<FAivState> ChangePatrol;
 	TSharedPtr<FAivState> MoveToPatrol;
 	TSharedPtr<FAivState> WaitForPatrol;
+	TSharedPtr<FAivState> Stunned;
 
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
@@ -99,6 +100,6 @@ protected:
 	float PatrolWaitTime = 5;
 	float PatrolCurrTimer;
 
-	bool bSlowEnemy;
+	
 
 };

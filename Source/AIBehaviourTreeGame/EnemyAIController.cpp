@@ -27,7 +27,7 @@ void AEnemyAIController::BeginPlay()
 				BestBall->SetActorRelativeLocation(FVector(0, 0, 0));
 				BestBall = nullptr;
 			}
-			return SearchForBall;
+			return WaitForBall;
 		}
 	);
 
@@ -44,13 +44,13 @@ void AEnemyAIController::BeginPlay()
 			for (int32 i = 0; i < BallsList.Num(); i++)
 			{
 				int64 BallValue = 999999999999999999;
-				if (bSlowEnemy)
+				if (Cast<AAIBehaviourTreeGameCharacter>(AIController->GetPawn())->bSlowEnemy)
 				{
 					BallValue = FVector::Distance(AIController->GetPawn()->GetActorLocation(), BallsList[i]->GetActorLocation()) + BallsList[i]->SpeedIncreace * RandomFactor;
 				}
 				else 
 				{
-					BallValue = FVector::Distance(AIController->GetPawn()->GetActorLocation(), BallsList[i]->GetActorLocation()) + BallsList[i]->SpeedIncreace * RandomFactor;
+					BallValue = FVector::Distance(AIController->GetPawn()->GetActorLocation(), BallsList[i]->GetActorLocation()) - BallsList[i]->SpeedIncreace * RandomFactor;
 				}
 				if (!BallsList[i]->GetAttachParentActor() &&
 					(!NearestBall ||
@@ -62,9 +62,8 @@ void AEnemyAIController::BeginPlay()
 				}
 			}
 
-			UE_LOG(LogTemp, Warning, TEXT("Ball: %d"), BestBallValue);
+			//UE_LOG(LogTemp, Warning, TEXT("Ball: %d"), BestBallValue);
 			BestBall = NearestBall;
-			UE_LOG(LogTemp, Warning, TEXT("BestBall"));
 		},
 		nullptr,
 		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {
@@ -124,7 +123,7 @@ void AEnemyAIController::BeginPlay()
 
 			if (!BestBall)
 			{
-				return WaitForBall;
+				return Stunned;
 			}
 
 			BestBall->AttachToActor(AIController->GetPawn(), FAttachmentTransformRules::KeepRelativeTransform);
@@ -192,6 +191,29 @@ void AEnemyAIController::BeginPlay()
 			}
 
 			return WaitForPatrol;
+		}
+	);
+
+	Stunned = MakeShared<FAivState>(
+		[this](AAIController* AIController) {
+			PatrolCurrTimer = 0;
+			UE_LOG(LogTemp, Warning, TEXT("Stunned"));
+		},
+		nullptr,
+		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {
+			PatrolCurrTimer += DeltaTime;
+			if (PatrolCurrTimer >= PatrolWaitTime)
+			{
+				if (FMath::RandRange(0, 100) < 10)
+				{
+					//UE_LOG(LogTemp, Warning, TEXT("Patrol"));
+					return ChangePatrol;
+				}
+				return SearchForBall;
+			}
+			UE_LOG(LogTemp, Warning, TEXT("!Girandola"));
+			//AIController->GetPawn()->SetActorRotation(FQuat(AIController->GetPawn()->GetActorRotation().)//AIController->GetPawn()->GetActorRotation() * (1 *DeltaTime));
+			return nullptr;
 		}
 	);
 
