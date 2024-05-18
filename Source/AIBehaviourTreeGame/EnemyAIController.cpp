@@ -74,7 +74,6 @@ void AEnemyAIController::BeginPlay()
 			}
 			else 
 			{
-				UE_LOG(LogTemp, Error, TEXT("Ricerco la palla"));
 				return WaitForBall;
 			}
 		}
@@ -139,25 +138,56 @@ void AEnemyAIController::BeginPlay()
 	ChangePatrol = MakeShared<FAivState>(
 		[this](AAIController* AIController)
 		{
-			const int32 RandomFactor = FMath::RandRange(0, 15);
-			CurrPatrol = Cast<AAIBehaviourTreeGameCharacter>(AIController->GetPawn())->ChangePatrolPoint(RandomFactor);
+			AAIBehaviourTreeGameCharacter* Enemy = Cast<AAIBehaviourTreeGameCharacter>(AIController->GetPawn());
+			const int32 RandomFactor = FMath::RandRange(0, Enemy->EnemyPatrolPoints.Num());
+			CurrPatrol = Enemy->ChangePatrolPoint(RandomFactor);
 		},
 		nullptr,
 		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {
 
-			if (!BestBall)
+			if (!CurrPatrol)
 			{
-				return SearchForBall;
+				return WaitForPatrol;
 			}
 
-			BestBall->AttachToActor(AIController->GetPawn(), FAttachmentTransformRules::KeepRelativeTransform);
-			BestBall->SetActorRelativeLocation(FVector(0, 0, 0));
-
-			return GoToPlayer;
+			return MoveToPatrol;
 		}
 	);
 
-	CurrentState = SearchForBall;
+	WaitForPatrol = MakeShared<FAivState>(
+		[this](AAIController* AIController) {
+			PatrolCurrTimer = 0;
+		},
+		nullptr,
+		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {
+			PatrolCurrTimer += DeltaTime;
+
+			if (PatrolCurrTimer >= PatrolWaitTime)
+			{
+				return ChangePatrol;
+			}
+			return nullptr;
+		}
+	);
+
+	MoveToPatrol = MakeShared<FAivState>(
+		[this](AAIController* AIController) {
+			AIController->MoveToActor(CurrPatrol, 100.0f);
+		},
+		nullptr,
+		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {
+			EPathFollowingStatus::Type State = AIController->GetMoveStatus();
+
+			if (State == EPathFollowingStatus::Moving)
+			{
+				return nullptr;
+			}
+
+			return WaitForPatrol;
+		}
+	);
+
+	CurrentState = ChangePatrol;
 	CurrentState->CallEnter(this);
 }
 
@@ -169,4 +199,11 @@ void AEnemyAIController::Tick(float DeltaTime)
 	{
 		CurrentState = CurrentState->CallTick(this, DeltaTime);
 	}
+}
+
+
+bool AEnemyAIController::IsPlayerInSightRadius(APawn* Player)
+{
+
+	return false;
 }

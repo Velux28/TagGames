@@ -89,6 +89,7 @@ protected:
 
 	void BeginPlay() override;
 	void Tick(float DeltaTime) override;
+	bool IsPlayerInSightRadius(APawn* Player);
 
 	ABall* BestBall;
 	AActor* CurrPatrol;

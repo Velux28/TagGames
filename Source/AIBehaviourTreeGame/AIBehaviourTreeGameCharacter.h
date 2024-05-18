@@ -75,5 +75,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	AActor* ChangePatrolPoint(int32 NewPoint);
+
 };
 
