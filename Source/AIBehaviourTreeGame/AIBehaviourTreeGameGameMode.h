@@ -25,6 +25,8 @@ public:
 
 	const TArray<class ABall*>& GetBalls() const;
 
+	int32 BallAttachedToPlayer = 0;
+
 };
 
 

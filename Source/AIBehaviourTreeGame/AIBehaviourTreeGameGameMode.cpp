@@ -21,14 +21,12 @@ AAIBehaviourTreeGameGameMode::AAIBehaviourTreeGameGameMode()
 void AAIBehaviourTreeGameGameMode::BeginPlay()
 {
 	Super::BeginPlay();
-
 	ResetMatch();
 }
 
 void AAIBehaviourTreeGameGameMode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 	for (int32 i = 0; i < GameBalls.Num(); i++)
 	{
 		if (GameBalls[i]->GetAttachParentActor() != GetWorld()->GetFirstPlayerController()->GetPawn()) 
@@ -47,7 +45,7 @@ const TArray<class ABall*>& AAIBehaviourTreeGameGameMode::GetBalls() const
 
 void AAIBehaviourTreeGameGameMode::ResetMatch()
 {
-
+	BallAttachedToPlayer = 0;
 	TargetPoints.Empty();
 	GameBalls.Empty();
 

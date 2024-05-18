@@ -26,6 +26,9 @@ void AEnemyAIController::BeginPlay()
 				BestBall->AttachToActor(AIController->GetWorld()->GetFirstPlayerController()->GetPawn(), FAttachmentTransformRules::KeepRelativeTransform);
 				BestBall->SetActorRelativeLocation(FVector(0, 0, 0));
 				BestBall = nullptr;
+				AAIBehaviourTreeGameGameMode* AIGameMode = Cast<AAIBehaviourTreeGameGameMode>(AIController->GetWorld()->GetAuthGameMode());
+				AIGameMode->BallAttachedToPlayer++;
+				UE_LOG(LogTemp, Warning, TEXT("%d"), AIGameMode->BallAttachedToPlayer);
 			}
 			return WaitForBall;
 		}
@@ -212,7 +215,11 @@ void AEnemyAIController::BeginPlay()
 				return SearchForBall;
 			}
 			UE_LOG(LogTemp, Warning, TEXT("!Girandola"));
-			//AIController->GetPawn()->SetActorRotation(FQuat(AIController->GetPawn()->GetActorRotation().)//AIController->GetPawn()->GetActorRotation() * (1 *DeltaTime));
+			AIController->GetPawn()->SetActorRotation(FRotator(
+				AIController->GetPawn()->GetActorRotation().Pitch,
+				AIController->GetPawn()->GetActorRotation().Yaw,
+				AIController->GetPawn()->GetActorRotation().Roll + (120 * DeltaTime))
+			);
 			return nullptr;
 		}
 	);
@@ -237,9 +244,11 @@ bool AEnemyAIController::IsPlayerInSightRadius(APawn* Player)
 	float SightRadius = Cast<AAIBehaviourTreeGameCharacter>(GetPawn())->SightRadius;
 	float SightAngle = Cast<AAIBehaviourTreeGameCharacter>(GetPawn())->SightAngle;
 	float PlayerDistance = FVector::Distance(GetPawn()->GetActorLocation(), Player->GetActorLocation());
+	//float PlayerRadius = FVector::DotProduct(GetPawn()->GetActorForwardVector(), Player->GetActorLocation());
 
 	if (PlayerDistance <= SightRadius)
 	{
+		//UE_LOG(LogTemp, Error, TEXT("%s"), PlayerRadius);
 		return true;
 	}
 
