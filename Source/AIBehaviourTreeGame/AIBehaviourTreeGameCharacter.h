@@ -72,9 +72,13 @@ public:
 
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 	TArray<AActor*> EnemyPatrolPoints;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float SightAngle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float SightRadius;
 
 	UFUNCTION(BlueprintCallable)
 	AActor* ChangePatrolPoint(int32 NewPoint);
-
+	
 };
 

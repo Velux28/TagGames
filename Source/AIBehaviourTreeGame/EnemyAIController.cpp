@@ -74,7 +74,7 @@ void AEnemyAIController::BeginPlay()
 			}
 			else 
 			{
-				return WaitForBall;
+				return ChangePatrol;
 			}
 		}
 	);
@@ -124,8 +124,7 @@ void AEnemyAIController::BeginPlay()
 
 			if (!BestBall)
 			{
-				//Cry About That
-				return SearchForBall;
+				return WaitForBall;
 			}
 
 			BestBall->AttachToActor(AIController->GetPawn(), FAttachmentTransformRules::KeepRelativeTransform);
@@ -139,7 +138,7 @@ void AEnemyAIController::BeginPlay()
 		[this](AAIController* AIController)
 		{
 			AAIBehaviourTreeGameCharacter* Enemy = Cast<AAIBehaviourTreeGameCharacter>(AIController->GetPawn());
-			const int32 RandomFactor = FMath::RandRange(0, Enemy->EnemyPatrolPoints.Num());
+			const int32 RandomFactor = FMath::RandRange(0, Enemy->EnemyPatrolPoints.Num() - 1);
 			CurrPatrol = Enemy->ChangePatrolPoint(RandomFactor);
 		},
 		nullptr,
@@ -160,6 +159,11 @@ void AEnemyAIController::BeginPlay()
 		},
 		nullptr,
 		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {
+			if (IsPlayerInSightRadius(AIController->GetWorld()->GetFirstPlayerController()->GetPawn()))
+			{
+				return SearchForBall;
+			}
+
 			PatrolCurrTimer += DeltaTime;
 
 			if (PatrolCurrTimer >= PatrolWaitTime)
@@ -176,6 +180,10 @@ void AEnemyAIController::BeginPlay()
 		},
 		nullptr,
 		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {
+			if (IsPlayerInSightRadius(AIController->GetWorld()->GetFirstPlayerController()->GetPawn()))
+			{
+				return SearchForBall;
+			}
 			EPathFollowingStatus::Type State = AIController->GetMoveStatus();
 
 			if (State == EPathFollowingStatus::Moving)
@@ -204,6 +212,14 @@ void AEnemyAIController::Tick(float DeltaTime)
 
 bool AEnemyAIController::IsPlayerInSightRadius(APawn* Player)
 {
+	float SightRadius = Cast<AAIBehaviourTreeGameCharacter>(GetPawn())->SightRadius;
+	float SightAngle = Cast<AAIBehaviourTreeGameCharacter>(GetPawn())->SightAngle;
+	float PlayerDistance = FVector::Distance(GetPawn()->GetActorLocation(), Player->GetActorLocation());
+
+	if (PlayerDistance <= SightRadius)
+	{
+		return true;
+	}
 
 	return false;
 }
