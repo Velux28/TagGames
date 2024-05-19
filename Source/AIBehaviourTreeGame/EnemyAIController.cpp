@@ -209,17 +209,11 @@ void AEnemyAIController::BeginPlay()
 			{
 				if (FMath::RandRange(0, 100) < 10)
 				{
-					//UE_LOG(LogTemp, Warning, TEXT("Patrol"));
 					return ChangePatrol;
 				}
 				return SearchForBall;
 			}
-			UE_LOG(LogTemp, Warning, TEXT("!Girandola"));
-			AIController->GetPawn()->SetActorRotation(FRotator(
-				AIController->GetPawn()->GetActorRotation().Pitch,
-				AIController->GetPawn()->GetActorRotation().Yaw,
-				AIController->GetPawn()->GetActorRotation().Roll + (120 * DeltaTime))
-			);
+			AIController->GetPawn()->AddActorLocalRotation(FQuat(0, 0, 1, 120 * DeltaTime));
 			return nullptr;
 		}
 	);
@@ -248,7 +242,7 @@ bool AEnemyAIController::IsPlayerInSightRadius(APawn* Player)
 
 	if (PlayerDistance <= SightRadius)
 	{
-		//UE_LOG(LogTemp, Error, TEXT("%s"), PlayerRadius);
+		Cast<AAIBehaviourTreeGameGameMode>(GetWorld()->GetAuthGameMode())->bGameStart = true;
 		return true;
 	}
 

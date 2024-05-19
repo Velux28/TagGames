@@ -27,6 +27,13 @@ void AAIBehaviourTreeGameGameMode::BeginPlay()
 void AAIBehaviourTreeGameGameMode::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bGameStart)
+	{
+		GameTimer += DeltaTime;
+		UE_LOG(LogTemp, Warning, TEXT("%f sec"), GameTimer);
+	}
+
 	for (int32 i = 0; i < GameBalls.Num(); i++)
 	{
 		if (GameBalls[i]->GetAttachParentActor() != GetWorld()->GetFirstPlayerController()->GetPawn()) 
@@ -34,6 +41,7 @@ void AAIBehaviourTreeGameGameMode::Tick(float DeltaTime)
 			return;
 		}
 	}
+
 
 	ResetMatch();
 }
@@ -45,7 +53,12 @@ const TArray<class ABall*>& AAIBehaviourTreeGameGameMode::GetBalls() const
 
 void AAIBehaviourTreeGameGameMode::ResetMatch()
 {
+	PreviousScore = BallAttachedToPlayer;
+	PreviousTimer = GameTimer;
+	bGameStart = false;
 	BallAttachedToPlayer = 0;
+	GameTimer = 0;
+
 	TargetPoints.Empty();
 	GameBalls.Empty();
 
@@ -73,6 +86,4 @@ void AAIBehaviourTreeGameGameMode::ResetMatch()
 		GameBalls[i]->SetActorLocation(TargetPoints[RandomTargetIndex]->GetActorLocation());
 		RandomTargetPoints.RemoveAt(RandomTargetIndex);
 	}
-
-	
 }

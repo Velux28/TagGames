@@ -26,6 +26,11 @@ public:
 	const TArray<class ABall*>& GetBalls() const;
 
 	int32 BallAttachedToPlayer = 0;
+	int32 PreviousScore = 0;
+	float GameTimer = 0;
+	float PreviousTimer = 0;
+
+	bool bGameStart = false;
 
 };
 
