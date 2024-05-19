@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AIBehaviourTreeGameCharacter.h"
 #include "GameFramework/Actor.h"
 #include "Components/BoxComponent.h"
 #include "PowerUp.generated.h"
@@ -19,8 +20,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	virtual void OnActorBeginOverlap();
-	virtual void ApplyEffect();
+	virtual void ApplyEffect(AAIBehaviourTreeGameCharacter* Character);
 	bool bActive;
 
 public:	

@@ -29,13 +29,7 @@ void APowerUp::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void APowerUp::ApplyEffect()
+void APowerUp::ApplyEffect(AAIBehaviourTreeGameCharacter* Character)
 {
 
-}
-
-void APowerUp::OnActorBeginOverlap() 
-{
-	bActive = true;
-	UE_LOG(LogTemp, Warning, TEXT("Overlap"));
 }

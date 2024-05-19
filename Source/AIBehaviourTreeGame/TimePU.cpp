@@ -22,6 +22,5 @@ void ATimePU::Tick(float DeltaTime)
 			CurrTimer = 0;
 			bActive = false;
 		}
-		ApplyEffect();
 	}
 }
