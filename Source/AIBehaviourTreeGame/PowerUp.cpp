@@ -29,7 +29,13 @@ void APowerUp::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void APowerUp::ApplyEffect(AAIBehaviourTreeGameCharacter* Character)
+void APowerUp::ApplyEffect_Implementation(AActor* Actor)
 {
+	AttachToActor(Actor, FAttachmentTransformRules::KeepRelativeTransform);
+	SetActorRelativeLocation(FVector(0, 0, 0));
+}
 
+void APowerUp::RemoveEffect_Implementation(AActor* Actor)
+{
+	UE_LOG(LogTemp, Warning, TEXT("LELETTURE"));
 }

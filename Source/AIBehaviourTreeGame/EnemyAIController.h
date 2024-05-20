@@ -95,9 +95,9 @@ protected:
 	ABall* BestBall;
 	AActor* CurrPatrol;
 
-	float BallWaitTime = 2;
+	const float BallWaitTime = 2;
 	float BallCurrTimer;
-	float PatrolWaitTime = 5;
+	const float PatrolWaitTime = 5;
 	float PatrolCurrTimer;
 
 	

@@ -99,7 +99,7 @@ void AEnemyAIController::BeginPlay()
 
 	GoToBall = MakeShared<FAivState>(
 		[this](AAIController* AIController) {
-			AIController->MoveToActor(BestBall, 100.0f);
+			AIController->MoveToActor(BestBall, 150.0f);
 		},
 		nullptr,
 		[this](AAIController* AIController, const float DeltaTime) -> TSharedPtr<FAivState> {

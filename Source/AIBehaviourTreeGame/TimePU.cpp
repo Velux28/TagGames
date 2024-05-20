@@ -20,7 +20,8 @@ void ATimePU::Tick(float DeltaTime)
 		if (CurrTimer >= Duration)
 		{
 			CurrTimer = 0;
-			bActive = false;
+			//bActive = false;
+			RemoveEffect(GetWorld()->GetFirstPlayerController()->GetPawn());
 		}
 	}
 }

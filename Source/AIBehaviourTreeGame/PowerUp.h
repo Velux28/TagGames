@@ -20,8 +20,11 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	virtual void ApplyEffect(AAIBehaviourTreeGameCharacter* Character);
-	bool bActive;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void ApplyEffect(AActor* Actor);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void RemoveEffect(AActor* Actor);
 
 public:	
 	// Called every frame
@@ -29,6 +32,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* PUMesh;
-	UPROPERTY(VisibleAnywhere, blueprintreadonly)
+	UPROPERTY(VisibleAnywhere, Blueprintreadonly)
 	UBoxComponent* PUBox;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	bool bActive;
 };
