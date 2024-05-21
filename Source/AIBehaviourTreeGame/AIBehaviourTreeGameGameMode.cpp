@@ -22,8 +22,6 @@ void AAIBehaviourTreeGameGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	ResetMatch();
-	GameWidget = CreateWidget<UScoreWidget>(GameWidget);
-	//GameWidget->AddToPlayerScreen();
 }
 
 void AAIBehaviourTreeGameGameMode::Tick(float DeltaTime)

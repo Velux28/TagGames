@@ -13,5 +13,6 @@ UCLASS()
 class AIBEHAVIOURTREEGAME_API UScoreWidget : public UUserWidget
 {
 	GENERATED_BODY()
+
 	
 };
