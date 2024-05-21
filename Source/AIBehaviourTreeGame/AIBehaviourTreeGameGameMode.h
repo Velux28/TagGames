@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "ScoreWidget.h"
 #include "AIBehaviourTreeGameGameMode.generated.h"
 
 UCLASS(minimalapi)
@@ -36,6 +37,7 @@ public:
 
 	bool bGameStart = false;
 
+	UScoreWidget* GameWidget;
 };
 
 
