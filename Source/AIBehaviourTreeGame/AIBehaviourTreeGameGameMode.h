@@ -25,9 +25,13 @@ public:
 
 	const TArray<class ABall*>& GetBalls() const;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 BallAttachedToPlayer = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int32 PreviousScore = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float GameTimer = 0;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float PreviousTimer = 0;
 
 	bool bGameStart = false;
